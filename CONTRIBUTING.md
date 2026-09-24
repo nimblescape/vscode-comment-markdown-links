@@ -81,19 +81,40 @@ the global personal access tokens that the Marketplace needs on
 1 December 2026. The publishing identity is an app registration with a
 federated credential: GitHub Actions proves the identity of the job with an
 OpenID Connect token, so no secret is stored. An app registration needs no
-Azure subscription.
+Azure subscription. One app registration publishes every extension of the
+publisher `nimblescape`, because the Marketplace grants the role of a member
+for the whole publisher.
+
+### Setup for the first extension
 
 1. Create the publisher. Sign in to the [publisher management page](https://marketplace.visualstudio.com/manage) of the Visual Studio Marketplace with the Microsoft account of nimblescape e.U. Choose "Create publisher" and enter the ID `nimblescape`, which must equal the publisher in `package.json`.
-2. Register the app. In the [Microsoft Entra admin center](https://entra.microsoft.com), open "App registrations" and choose "New registration". Enter a name such as `markdown-links-publisher` and keep "Single tenant". Note the "Application (client) ID" and the "Directory (tenant) ID". The app needs no API permission and no secret.
-3. Add the federated credential. In the app registration, open "Certificates & secrets", then the tab "Federated credentials", and choose "Add credential" with the scenario "GitHub Actions deploying Azure resources". Enter the organization `nimblescape`, the repository `vscode-markdown-links`, the entity type "Environment" and the environment `marketplace`. The subject is then `repo:nimblescape/vscode-markdown-links:environment:marketplace`.
-4. Create the GitHub environment. In the settings of this repository, open "Environments" and create the environment `marketplace`. Add the environment variable `AZURE_CLIENT_ID` with the application (client) ID and the environment variable `AZURE_TENANT_ID` with the directory (tenant) ID. Both values are identifiers, not secrets.
-5. Find the member ID. In the tab "Actions", run the workflow "Marketplace identity". Its summary shows the ID of the app registration.
-6. Authorize the identity. In the publisher management page, open the publisher `nimblescape`, then "Members". Add the ID of step 5 with the role "Contributor".
+2. Register the app. In the [Microsoft Entra admin center](https://entra.microsoft.com), open "App registrations" and choose "New registration". Enter a name such as `nimblescape-marketplace-publisher` and keep "Single tenant". Note the "Application (client) ID" and the "Directory (tenant) ID". The app needs no API permission and no secret.
+3. Set the variables. In the settings of the organization `nimblescape`, open "Secrets and variables", then "Actions", then the tab "Variables". Add the organization variable `AZURE_CLIENT_ID` with the application (client) ID and the organization variable `AZURE_TENANT_ID` with the directory (tenant) ID. Both values are identifiers, not secrets. The workflows take the variable of the environment first, then the one of the repository, then the one of the organization. Organization variables reach private repositories only on a paid GitHub plan.
+4. Add the federated credential. In the app registration, open "Certificates & secrets", then the tab "Federated credentials", and choose "Add credential" with the scenario "GitHub Actions deploying Azure resources". Enter the values of the table below. The subject is then `repo:nimblescape@156021698/vscode-markdown-links@1385966074:environment:marketplace`.
+5. Create the environment. In the settings of this repository, open "Environments" and create the environment `marketplace`. Add a deployment rule that allows the tags `v*` and the branch `main`, so that only a released version and the workflow "Marketplace identity" reach the environment.
+6. Find the member ID. In the tab "Actions", run the workflow "Marketplace identity". Its summary shows the ID of the app registration.
+7. Authorize the identity. In the publisher management page, open the publisher `nimblescape`, then "Members". Add the ID of step 6 with the role "Contributor".
 
-The environment accepts every branch and tag by default. After step 5, a
-deployment rule that allows only tags `v*` limits the environment to released
-versions. Allow the branch `main` as well to run the workflow "Marketplace
-identity" again.
+| Field of the federated credential | Value for this repository |
+| --- | --- |
+| Organization | `nimblescape` |
+| Organization ID | `156021698` |
+| Repository | `vscode-markdown-links` |
+| Repository ID | `1385966074` |
+| Entity type | Environment |
+| GitHub environment name | `marketplace` |
+| Audience | `api://AzureADTokenExchange`, the default |
+
+GitHub puts the owner ID and the repository ID into the subject of every
+repository created after 15 July 2026, so a new owner of a reused name gets no
+token. The command `gh api repos/nimblescape/<repository> --jq .id` prints
+the ID of a repository.
+
+### Setup for each further extension
+
+A further extension repository needs only steps 4 and 5, with its own
+repository name and ID. The publisher, the app, the variables and the member
+stay unchanged. One app accepts at most 20 federated credentials.
 
 ---
 

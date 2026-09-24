@@ -117,8 +117,8 @@ jobs:
     name: Publish to the Visual Studio Marketplace
     needs: github-release
     runs-on: ubuntu-latest
-    # The environment holds the identifiers of the publishing app registration,
-    # and its name is part of the subject of the federated credential.
+    # The rules of the environment decide which runs may publish, and its name
+    # is part of the subject of the federated credential.
     environment: marketplace
     permissions:
       contents: read
