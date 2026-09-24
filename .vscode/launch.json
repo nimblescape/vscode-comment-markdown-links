@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: MIT
+// © 2026 Hannes Stauss (scalarion@nimblescape.com)
+// Licensed under the MIT License. See LICENSE in the repository root for details.
+
+// Start a second VS Code window that loads the extension from this folder, so
+// that a change can be tried without a package. Open a folder whose comments
+// carry Markdown links in that window. A reload of that window loads a change.
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run the extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"]
+    }
+  ]
+}

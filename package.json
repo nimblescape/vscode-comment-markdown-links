@@ -1,0 +1,95 @@
+{
+  "name": "markdown-links",
+  "displayName": "nimblescape Markdown Links",
+  "description": "Show only the labels of the Markdown links in the comments of source and configuration files, open each with the editor of the window at the heading it names, and complete the paths and headings of a link.",
+  "publisher": "nimblescape",
+  "author": {
+    "name": "nimblescape e.U.",
+    "url": "https://nimblescape.com"
+  },
+  "version": "0.4.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "links",
+    "comments",
+    "go"
+  ],
+  "license": "MIT",
+  "homepage": "https://nimblescape.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nimblescape/vscode-markdown-links.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nimblescape/vscode-markdown-links/issues"
+  },
+  "main": "./extension.cjs",
+  "files": [
+    "extension.cjs",
+    "links.cjs",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "package": "vsce package --no-dependencies --no-rewrite-relative-links"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "4.0.0"
+  },
+  "extensionKind": [
+    "workspace"
+  ],
+  "activationEvents": [
+    "onLanguage:go",
+    "onLanguage:go.mod",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:json",
+    "onLanguage:jsonc",
+    "onLanguage:css",
+    "onLanguage:scss",
+    "onLanguage:less",
+    "onLanguage:html",
+    "onLanguage:xml",
+    "onLanguage:yaml",
+    "onLanguage:github-actions-workflow",
+    "onLanguage:shellscript",
+    "onLanguage:dockerfile",
+    "onLanguage:ignore",
+    "onLanguage:makefile",
+    "onLanguage:toml",
+    "onLanguage:properties",
+    "onLanguage:ini",
+    "onLanguage:sql"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true,
+      "description": "The extension reads Markdown files to open headings and changes no file."
+    },
+    "virtualWorkspaces": {
+      "supported": true
+    }
+  },
+  "contributes": {
+    "configuration": {
+      "title": "nimblescape Markdown Links",
+      "properties": {
+        "nimblescape.markdownLinks.hideTargets": {
+          "type": "boolean",
+          "default": true,
+          "description": "Hide the brackets and the target of a resolved Markdown link in a comment, so that only its label shows. The lines of the cursor show the whole link."
+        }
+      }
+    }
+  }
+}

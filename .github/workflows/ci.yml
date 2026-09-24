@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: MIT
+# © 2026 Hannes Stauss (scalarion@nimblescape.com)
+# Licensed under the MIT License. See LICENSE in the repository root for details.
+
+# Test the extension and build its package for every push to main and every
+# pull request. The job installs the locked development tools, runs the Node
+# tests and packages the VSIX with vsce, which also validates the manifest and
+# the README. The VSIX stays a workflow artifact for inspection. This workflow
+# publishes nothing: the release workflow publishes a tagged version.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  # Checkout needs repository reads; the checks get no write scope.
+  contents: read
+
+jobs:
+  check:
+    name: Test and package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up the pinned Node release
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+
+      - name: Install the locked development tools without install scripts
+        run: npm ci --ignore-scripts
+
+      - name: Run the tests
+        run: npm test
+
+      - name: Build the VSIX package
+        run: npm run package
+
+      - name: Keep the VSIX package
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: vsix
+          path: '*.vsix'
+          if-no-files-found: error
