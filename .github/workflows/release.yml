@@ -37,6 +37,9 @@ jobs:
   build:
     name: Release build
     runs-on: ubuntu-latest
+    outputs:
+      # The file name of the VSIX, <name>-<version>.vsix from the manifest, for the later jobs.
+      vsix: ${{ steps.package.outputs.vsix }}
     steps:
       - name: Check out the tagged source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -70,14 +73,17 @@ jobs:
         run: npm test
 
       - name: Build the VSIX package
-        run: npm run package
+        id: package
+        run: |
+          npm run package
+          echo "vsix=$(node -p 'const {name, version} = require("./package.json"); `${name}-${version}.vsix`')" >> "$GITHUB_OUTPUT"
 
       - name: Keep the release files
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: release
           path: |
-            markdown-links-*.vsix
+            ${{ steps.package.outputs.vsix }}
             notes.md
           if-no-files-found: error
 
@@ -101,8 +107,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          VSIX: ${{ needs.build.outputs.vsix }}
         run: |
-          vsix="markdown-links-${GITHUB_REF_NAME#v}.vsix"
+          vsix="$VSIX"
           if gh release view "$GITHUB_REF_NAME" --json assets --jq '.assets[].name' > assets.txt; then
             if grep -Fqx "$vsix" assets.txt; then
               echo "The release $GITHUB_REF_NAME keeps its file $vsix."
@@ -115,7 +122,7 @@ jobs:
 
   publish:
     name: Publish to the Visual Studio Marketplace
-    needs: github-release
+    needs: [build, github-release]
     runs-on: ubuntu-latest
     # The rules of the environment decide which runs may publish, and its name
     # is part of the subject of the federated credential.
@@ -142,7 +149,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: gh release download "$GITHUB_REF_NAME" --pattern "markdown-links-${GITHUB_REF_NAME#v}.vsix"
+          VSIX: ${{ needs.build.outputs.vsix }}
+        run: gh release download "$GITHUB_REF_NAME" --pattern "$VSIX"
 
       - name: Sign in to Microsoft Entra ID
         uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
@@ -156,4 +164,5 @@ jobs:
         env:
           # vsce requests the token of the signed-in Azure CLI for this tenant.
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
-        run: npx vsce publish --azure-credential --packagePath "markdown-links-${GITHUB_REF_NAME#v}.vsix" --skip-duplicate
+          VSIX: ${{ needs.build.outputs.vsix }}
+        run: npx vsce publish --azure-credential --packagePath "$VSIX" --skip-duplicate

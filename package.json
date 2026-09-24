@@ -1,13 +1,13 @@
 {
-  "name": "markdown-links",
-  "displayName": "nimblescape Markdown Links",
+  "name": "comment-markdown-links",
+  "displayName": "nimblescape Comment Markdown Links",
   "description": "Show only the labels of the Markdown links in the comments of source and configuration files, open each with the editor of the window at the heading it names, and complete the paths and headings of a link.",
   "publisher": "nimblescape",
   "author": {
     "name": "nimblescape e.U.",
     "url": "https://nimblescape.com"
   },
-  "version": "0.4.0",
+  "version": "0.4.1",
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -24,10 +24,10 @@
   "homepage": "https://nimblescape.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nimblescape/vscode-markdown-links.git"
+    "url": "https://github.com/nimblescape/vscode-comment-markdown-links.git"
   },
   "bugs": {
-    "url": "https://github.com/nimblescape/vscode-markdown-links/issues"
+    "url": "https://github.com/nimblescape/vscode-comment-markdown-links/issues"
   },
   "main": "./extension.cjs",
   "files": [
@@ -82,9 +82,9 @@
   },
   "contributes": {
     "configuration": {
-      "title": "nimblescape Markdown Links",
+      "title": "nimblescape Comment Markdown Links",
       "properties": {
-        "nimblescape.markdownLinks.hideTargets": {
+        "nimblescape.commentMarkdownLinks.hideTargets": {
           "type": "boolean",
           "default": true,
           "description": "Hide the brackets and the target of a resolved Markdown link in a comment, so that only its label shows. The lines of the cursor show the whole link."

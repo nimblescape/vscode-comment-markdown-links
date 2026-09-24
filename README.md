@@ -1,4 +1,4 @@
-# nimblescape Markdown Links
+# nimblescape Comment Markdown Links
 
 This VS Code extension turns the Markdown links inside the comments of source
 and configuration files into editor links. A language server links web
@@ -27,20 +27,20 @@ the extension cannot remove it. The extension hides the target instead, as
 the next sections explain, so that web-address link shows no underline.
 
 Publisher: **nimblescape e.U.** (`https://nimblescape.com`). Extension ID:
-`nimblescape.markdown-links`.
+`nimblescape.comment-markdown-links`.
 
 ## Installation
 
 Install the extension from the Visual Studio Marketplace under the ID
-`nimblescape.markdown-links`, or run this command:
+`nimblescape.comment-markdown-links`, or run this command:
 
 ```sh
-code --install-extension nimblescape.markdown-links
+code --install-extension nimblescape.comment-markdown-links
 ```
 
-Every [GitHub release](https://github.com/nimblescape/vscode-markdown-links/releases)
+Every [GitHub release](https://github.com/nimblescape/vscode-comment-markdown-links/releases)
 also carries the `.vsix` file of its version. Install such a file with
-`code --install-extension markdown-links-<version>.vsix`. The extension needs
+`code --install-extension comment-markdown-links-<version>.vsix`. The extension needs
 VS Code 1.95 or later.
 
 ## Languages
@@ -139,7 +139,7 @@ absolute path or a bare fragment gets no completion.
 
 | Setting | Type | Default | Effect |
 | --- | --- | --- | --- |
-| `nimblescape.markdownLinks.hideTargets` | boolean | `true` | Hides the brackets and the target of a resolved link. The value `false` shows every link completely. |
+| `nimblescape.commentMarkdownLinks.hideTargets` | boolean | `true` | Hides the brackets and the target of a resolved link. The value `false` shows every link completely. |
 
 ## Scope and limits
 
@@ -158,12 +158,12 @@ style language are not recognized there.
 ## Source and issues
 
 The source lives in the
-[nimblescape/vscode-markdown-links](https://github.com/nimblescape/vscode-markdown-links)
+[nimblescape/vscode-comment-markdown-links](https://github.com/nimblescape/vscode-comment-markdown-links)
 repository. Report a problem as a
-[GitHub issue](https://github.com/nimblescape/vscode-markdown-links/issues). The
-[contributor guide](https://github.com/nimblescape/vscode-markdown-links/blob/main/CONTRIBUTING.md)
+[GitHub issue](https://github.com/nimblescape/vscode-comment-markdown-links/issues). The
+[contributor guide](https://github.com/nimblescape/vscode-comment-markdown-links/blob/main/CONTRIBUTING.md)
 explains the development, the tests and the release.
 
 ---
 
-© 2026 Hannes Stauss (scalarion@nimblescape.com) · [MIT License](https://github.com/nimblescape/vscode-markdown-links/blob/main/LICENSE).
+© 2026 Hannes Stauss (scalarion@nimblescape.com) · [MIT License](https://github.com/nimblescape/vscode-comment-markdown-links/blob/main/LICENSE).

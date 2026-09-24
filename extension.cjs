@@ -38,7 +38,7 @@ const vscode = require("vscode");
 const { syntaxes, commentLinks, headingLine, headings, linkUnderCursor, defaultEditor } = require("./links.cjs");
 
 /** openCommand names the command that opens the target of a link. */
-const openCommand = "nimblescape.markdownLinks.open";
+const openCommand = "nimblescape.commentMarkdownLinks.open";
 
 /** previewEditor identifies the Markdown preview of the editor, which scrolls to a fragment of its resource. */
 const previewEditor = "vscode.markdown.preview.editor";
@@ -50,7 +50,7 @@ const clickWindow = 2000;
 const completionTriggers = ["(", "/", "#"];
 
 /** settingsSection names the configuration section of the extension. */
-const settingsSection = "nimblescape.markdownLinks";
+const settingsSection = "nimblescape.commentMarkdownLinks";
 
 /**
  * activate registers the command, the document link provider for the listed

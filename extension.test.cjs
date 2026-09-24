@@ -22,10 +22,10 @@ const vm = require("node:vm");
 const { syntaxes } = require("./links.cjs");
 
 /** openCommand is the command of the extension that opens a heading. */
-const openCommand = "nimblescape.markdownLinks.open";
+const openCommand = "nimblescape.commentMarkdownLinks.open";
 
 /** settingsSection is the configuration section of the extension, which the fake editor API serves alone. */
-const settingsSection = "nimblescape.markdownLinks";
+const settingsSection = "nimblescape.commentMarkdownLinks";
 
 /**
  * plain copies a value created inside the VM realm into ordinary objects of
