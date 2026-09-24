@@ -9,8 +9,9 @@
  * link, the editor that the command opens for the default editor of the
  * window, the cursor that a followed link keeps, the hiding of link targets
  * outside the lines of the cursor, the handling of a target that resolves
- * nowhere, the activation events and the setting of the manifest, and the
- * files of the package. No installed editor is touched.
+ * nowhere, the activation events and the setting of the manifest, the files
+ * of the package, and the links and the settings table of its documents. No
+ * installed editor is touched.
  */
 
 const { test } = require("node:test");
@@ -528,4 +529,12 @@ test("the documents of the package link outside code to web addresses or fragmen
       assert.match(match[1], /^(https:\/\/|#)/, `${name} links to the relative target ${match[1]}`);
     }
   }
+});
+
+test("the README names every setting that the manifest contributes", async () => {
+  const manifest = JSON.parse(await fs.readFile(path.join(__dirname, "package.json"), "utf8"));
+  const readme = await fs.readFile(path.join(__dirname, "README.md"), "utf8");
+  const settings = Object.keys(manifest.contributes.configuration.properties);
+  assert.ok(settings.length > 0, "the manifest contributes settings");
+  for (const setting of settings) assert.ok(readme.includes(`\`${setting}\``), `README.md does not name ${setting}`);
 });

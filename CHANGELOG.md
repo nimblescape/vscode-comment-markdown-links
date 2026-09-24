@@ -5,7 +5,9 @@ takes the section of a version as the notes of its GitHub release.
 
 ## 0.4.2
 
-- A short description for the Marketplace listing.
+- A short description and a short README for the Marketplace listing: the
+  use, the link resolution, the files whose comments the extension reads and
+  the settings.
 
 ## 0.4.1
 

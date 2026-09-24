@@ -1,7 +1,8 @@
 # Contributing
 
 This guide explains the files, the development, the tests and the release of
-the extension. The [README](README.md) describes the behavior for users.
+the extension. The [README](README.md) describes the use in short, and the
+section [How the extension works](#how-the-extension-works) keeps the details.
 
 ## Files
 
@@ -50,6 +51,89 @@ without a package.
 - The configuration contribution declares the setting that turns the hiding of targets off.
 - The untrusted-workspace and virtual-workspace capabilities state that the extension only reads.
 - The development dependency pins vsce. The manifest declares no runtime dependency.
+
+The file table of the README follows the language table of `links.cjs`, and
+the settings table of the README follows the configuration contribution. A
+test checks that the README names every setting.
+
+## How the extension works
+
+### Links on the label
+
+The extension registers one document link provider for the listed
+languages. The editor link covers the label of `[label](target)`, as in
+rendered Markdown, for one more reason. The Go language server takes the file
+name of a target such as `unit.md#a-unit-001` for a web address, because
+`.md` is also a top-level domain, and links it to `https://unit.md`. The
+editor keeps only one of two links that overlap: the link of the provider
+that registered later. The Go language server registers its provider after
+this extension and again after every restart, so a link on the target would
+disappear behind that web-address link, and the extension cannot remove it.
+The extension hides the target instead, so that the web-address link shows
+no underline.
+
+### Hidden targets
+
+An editor decoration hides the brackets and the target of every resolved
+link. The text stays in the file. The lines that a cursor or a selection
+touches show the whole link. A link whose target resolves nowhere stays
+visible, so that a broken citation is seen. The editor offers no interface
+for hidden text, so the decoration uses the `display` style through its text
+decoration, as other extensions do.
+
+### Opening a target
+
+Every link opens through a command of the extension. The command opens the
+target with the editor that the window associates with it, as the setting
+`workbench.editorAssociations` and the menu "Set Default for '*.md'" record
+it. A Markdown target with a fragment opens at the heading the fragment names
+where that editor can show one:
+
+| Default editor | Opens at |
+| --- | --- |
+| Text Editor | the heading, at the top of the view |
+| Markdown Preview | the heading, through the fragment of the resource |
+| Markdown Editor, or another editor | the start of the document, with the line of the heading as the requested selection |
+
+For every editor other than the Markdown Preview, the command reads the
+current text of the target and looks for the first heading whose anchor
+equals the fragment. Headings inside fenced code blocks do not count. The
+Markdown Editor ignores the requested selection, because VS Code passes no
+selection to a custom editor, as
+[microsoft/vscode#289785](https://github.com/microsoft/vscode/issues/289785)
+records. A fragment without a heading requests the start of the document. A
+target without a fragment opens as the editor opens files.
+
+The editor moves the cursor to a mouse click before it follows a link. The
+command puts the cursor of the source editor back to where it was before the
+click, so that following a link with the mouse moves no cursor and reveals no
+hidden target.
+
+### Completion
+
+While a Markdown link to a local file is written in a comment, the extension
+completes its target. Before a number sign it offers the folders and files of
+the directory that the target names, resolved like a link: the entries beside
+the file first, then the entries of the workspace folder. A folder inserts
+its name with a slash and opens the next completion. After the number sign of
+a Markdown target it offers the anchors of the headings of that document,
+with the heading text as the detail. The completion opens on `(`, `/` and
+`#`, and on the completion key of the editor. A link to a web address, an
+absolute path or a bare fragment gets no completion.
+
+### Scope and limits
+
+The extension reads files through the workspace file system, changes no
+file, runs no process and needs no opt-in. It supports untrusted and virtual
+workspaces, because it only reads. It runs in the workspace host
+(`extensionKind: workspace`), so it resolves links on a remote host, for
+example in a Codespace.
+
+The extension recognizes links in comments only. It resolves no link in a
+string literal, in a generated documentation view, in a Markdown file or in a
+language outside the table of the README. A script or style block inside an
+HTML document follows the markup syntax, so the comment markers of the script
+or style language are not recognized there.
 
 ## Release
 
