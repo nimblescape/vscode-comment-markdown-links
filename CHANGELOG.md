@@ -3,6 +3,10 @@
 Each section lists the changes of one released version. The release workflow
 takes the section of a version as the notes of its GitHub release.
 
+## 0.4.2
+
+- A short description for the Marketplace listing.
+
 ## 0.4.1
 
 - First release on the Visual Studio Marketplace under the extension ID

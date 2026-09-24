@@ -1,13 +1,13 @@
 {
   "name": "comment-markdown-links",
   "displayName": "nimblescape Comment Markdown Links",
-  "description": "Show only the labels of the Markdown links in the comments of source and configuration files, open each with the editor of the window at the heading it names, and complete the paths and headings of a link.",
+  "description": "Clickable Markdown links in code comments that open at the named heading.",
   "publisher": "nimblescape",
   "author": {
     "name": "nimblescape e.U.",
     "url": "https://nimblescape.com"
   },
-  "version": "0.4.1",
+  "version": "0.4.2",
   "engines": {
     "vscode": "^1.95.0"
   },
